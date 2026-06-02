@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Palace — Benguela, Angola</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --marrom:        #3b2314;
+  --marrom-med:    #5c3520;
+  --marrom-light:  #8b5e3c;
+  --dourado:       #c9a84c;
+  --dourado-light: #e2c06a;
+  --dourado-pale:  rgba(201,168,76,.12);
+  --branco:        #ffffff;
+  --branco-creme:  #faf7f2;
+  --cinza-claro:   #f0ece4;
+  --texto-sec:     #8a7a6a;
+  --borda:         rgba(201,168,76,.3);
+  --radius:        12px;
+  --sombra:        0 8px 40px rgba(59,35,20,.18);
+  --sombra-gold:   0 4px 24px rgba(201,168,76,.2);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--branco-creme);
+  color: var(--marrom);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(59,35,20,.42);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(201,168,76,.18);
+  transition: background .4s;
+}
+header.scrolled { background: rgba(59,35,20,.95); }
+.header-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 32px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo { text-decoration: none; text-align: center; }
+.logo-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem; font-weight: 600;
+  color: var(--dourado); letter-spacing: 4px;
+  text-transform: uppercase; display: block;
+}
+.logo-sub {
+  font-size: .55rem; font-weight: 400;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(255,255,255,.45); display: block; margin-top: 1px;
+}
+nav { display: flex; align-items: center; gap: 32px; }
+nav a {
+  color: rgba(255,255,255,.7); text-decoration: none;
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; transition: color .2s;
+}
+nav a:hover { color: var(--dourado); }
+.nav-reservar {
+  border: 1px solid var(--dourado);
+  color: var(--dourado) !important;
+  padding: 9px 22px; border-radius: 4px;
+  transition: background .2s, color .2s !important;
+}
+.nav-reservar:hover { background: var(--dourado); color: var(--marrom) !important; }
+.hamburger {
+  display: none; flex-direction: column; justify-content: center;
+  gap: 5px; width: 36px; height: 36px;
+  cursor: pointer; background: none; border: none; padding: 4px;
+}
+.hamburger span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--dourado); border-radius: 1px;
+  transition: transform .3s, opacity .3s, width .3s;
+  transform-origin: center;
+}
+.hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; width: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+.mobile-nav {
+  display: none; flex-direction: column;
+  background: rgba(59,35,20,.98);
+  border-top: 1px solid var(--borda);
+  padding: 22px 32px 26px; gap: 18px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  color: rgba(255,255,255,.75); text-decoration: none;
+  font-size: .85rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; transition: color .2s;
+}
+.mobile-nav a:hover { color: var(--dourado); }
+
+/* ── HERO FULLSCREEN ── */
+.hero {
+  position: relative; width: 100%; height: 100vh;
+  min-height: 640px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-slides { position: absolute; inset: 0; }
+.hero-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1.5s ease;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide:nth-child(1) { background-image: url('https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1400'); }
+.hero-slide:nth-child(2) { background-image: url('https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1400'); }
+.hero-slide:nth-child(3) { background-image: url('https://images.pexels.com/photos/1134176/pexels-photo-1134176.jpeg?auto=compress&cs=tinysrgb&w=1400'); }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(59,35,20,.5) 0%,
+    rgba(59,35,20,.3) 40%,
+    rgba(59,35,20,.75) 100%
+  );
+  z-index: 1;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center; padding: 0 24px;
+}
+.hero-pre {
+  font-size: .65rem; font-weight: 700;
+  letter-spacing: 5px; text-transform: uppercase;
+  color: var(--dourado); margin-bottom: 20px;
+  opacity: 0; animation: fadeUp .8s .3s forwards;
+}
+.hero-stars {
+  display: flex; justify-content: center; gap: 6px;
+  margin-bottom: 20px;
+  opacity: 0; animation: fadeUp .8s .5s forwards;
+}
+.hero-stars svg { color: var(--dourado); }
+.hero h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.8rem, 8vw, 7rem);
+  font-weight: 400; color: var(--branco);
+  line-height: 1.05; letter-spacing: 6px;
+  text-transform: uppercase;
+  opacity: 0; animation: fadeUp .9s .7s forwards;
+}
+.hero-divider {
+  display: flex; align-items: center; gap: 16px;
+  justify-content: center; margin: 24px 0;
+  opacity: 0; animation: fadeUp .8s .9s forwards;
+}
+.hero-divider-line {
+  width: 60px; height: 1px; background: var(--dourado); opacity: .6;
+}
+.hero-divider-icon { color: var(--dourado); }
+.hero-sub {
+  font-size: clamp(.88rem, 2vw, 1.05rem);
+  font-weight: 300; font-style: italic;
+  color: rgba(255,255,255,.72); letter-spacing: 1px;
+  opacity: 0; animation: fadeUp .8s 1.1s forwards;
+}
+.hero-cta {
+  display: flex; gap: 16px; justify-content: center;
+  margin-top: 36px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp .8s 1.3s forwards;
+}
+.btn-gold-fill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--dourado); color: var(--marrom);
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  padding: 15px 36px; text-decoration: none; border-radius: 4px;
+  transition: background .2s, transform .15s, box-shadow .2s;
+}
+.btn-gold-fill:hover {
+  background: var(--dourado-light);
+  transform: translateY(-2px); box-shadow: var(--sombra-gold);
+}
+.btn-gold-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--branco);
+  border: 1px solid rgba(255,255,255,.45);
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  padding: 15px 36px; text-decoration: none; border-radius: 4px;
+  transition: border-color .2s, color .2s;
+}
+.btn-gold-outline:hover { border-color: var(--dourado); color: var(--dourado); }
+/* Slide indicators */
+.hero-dots {
+  position: absolute; bottom: 32px; left: 50%;
+  transform: translateX(-50%); z-index: 2;
+  display: flex; gap: 10px;
+}
+.hero-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.35);
+  cursor: pointer; transition: background .3s, transform .3s;
+  border: none;
+}
+.hero-dot.active { background: var(--dourado); transform: scale(1.4); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── FUNDO COM IMAGEM DE NATUREZA (meio site) ── */
+.natureza-bg {
+  position: relative;
+  background-image: url('https://images.pexels.com/photos/1287460/pexels-photo-1287460.jpeg?auto=compress&cs=tinysrgb&w=1400');
+  background-size: cover; background-position: center;
+  background-attachment: fixed;
+}
+.natureza-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(250,247,242,.82);
+  backdrop-filter: blur(3px);
+}
+.natureza-bg > * { position: relative; z-index: 1; }
+
+/* ── APRESENTAÇÃO ── */
+.apresentacao { padding: 100px 32px; text-align: center; }
+.apresentacao-inner { max-width: 720px; margin: 0 auto; }
+.sec-tag {
+  display: inline-block;
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--dourado); margin-bottom: 18px;
+}
+.sec-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 400; color: var(--marrom);
+  letter-spacing: 2px; line-height: 1.25;
+  margin-bottom: 20px;
+}
+.sec-title em { font-style: italic; color: var(--marrom-light); }
+.gold-divider {
+  display: flex; align-items: center; gap: 14px;
+  justify-content: center; margin: 24px 0;
+}
+.gold-divider-line { width: 50px; height: 1px; background: var(--dourado); opacity: .5; }
+.gold-divider-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--dourado);
+}
+.sec-text {
+  font-size: .95rem; font-weight: 300;
+  color: var(--texto-sec); line-height: 1.9;
+}
+
+/* ── SERVIÇOS — cards horizontais ── */
+#servicos { padding: 0 32px 100px; }
+.servicos-list { display: flex; flex-direction: column; gap: 24px; max-width: 1100px; margin: 0 auto; }
+
+.serv-card-h {
+  position: relative; border-radius: var(--radius);
+  overflow: hidden; border: 1px solid var(--borda);
+  box-shadow: var(--sombra);
+  height: 340px;
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.serv-card-h:hover { transform: translateY(-5px); box-shadow: 0 16px 56px rgba(59,35,20,.22); }
+.serv-card-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform .5s ease;
+}
+.serv-card-h:hover .serv-card-img { transform: scale(1.04); }
+/* Degradê na parte de baixo para aparecer o texto */
+.serv-card-gradient {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 65%;
+  background: linear-gradient(
+    to top,
+    rgba(59,35,20,.92) 0%,
+    rgba(59,35,20,.6) 50%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+.serv-card-body {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  z-index: 2; padding: 28px 36px 32px;
+}
+.serv-card-cat {
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--dourado); margin-bottom: 8px;
+}
+.serv-card-nome {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+  font-weight: 500; color: var(--branco);
+  letter-spacing: 2px; margin-bottom: 10px; line-height: 1.2;
+}
+.serv-card-desc {
+  font-size: .85rem; font-weight: 300;
+  color: rgba(255,255,255,.75); line-height: 1.7;
+  max-width: 640px;
+}
+/* Borda dourada lateral esquerda */
+.serv-card-h::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--dourado); z-index: 3;
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform .4s ease;
+}
+.serv-card-h:hover::before { transform: scaleY(1); }
+
+/* ── CTA SIMPLES ── */
+.cta-simples {
+  padding: 80px 32px; text-align: center;
+  background: var(--marrom);
+}
+.cta-simples p {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 400; color: var(--branco);
+  letter-spacing: 2px; line-height: 1.5;
+}
+.cta-simples p span { color: var(--dourado); }
+
+/* ── LOCALIZAÇÃO E CONTACTO ── */
+#contacto { padding: 90px 32px; background: var(--cinza-claro); }
+.contacto-grid {
+  display: grid; grid-template-columns: 1fr 1.6fr;
+  gap: 56px; align-items: start;
+  max-width: 1100px; margin: 0 auto;
+}
+.contacto-info { display: flex; flex-direction: column; gap: 28px; }
+.contacto-item { display: flex; align-items: flex-start; gap: 18px; }
+.contacto-icon {
+  width: 44px; height: 44px; flex-shrink: 0;
+  border: 1px solid var(--borda); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--dourado);
+}
+.contacto-text h4 {
+  font-family: 'Cinzel', serif;
+  font-size: .78rem; letter-spacing: 2px;
+  color: var(--dourado); margin-bottom: 5px;
+}
+.contacto-text p, .contacto-text a {
+  font-size: .88rem; font-weight: 300;
+  color: var(--texto-sec); text-decoration: none;
+  display: block; line-height: 1.7; transition: color .2s;
+}
+.contacto-text a:hover { color: var(--dourado); }
+/* Botões CTA lado a lado */
+.contacto-btns {
+  display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap;
+}
+.btn-wa-hotel {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--dourado); color: var(--marrom);
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 13px 26px; border-radius: 4px; text-decoration: none;
+  transition: background .2s, transform .15s; box-shadow: var(--sombra-gold);
+}
+.btn-wa-hotel:hover { background: var(--dourado-light); transform: translateY(-1px); }
+.btn-info-hotel {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--marrom);
+  border: 1px solid var(--borda);
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 13px 26px; border-radius: 4px; text-decoration: none;
+  cursor: pointer; transition: border-color .2s, color .2s;
+}
+.btn-info-hotel:hover { border-color: var(--dourado); color: var(--dourado); }
+/* Modal sobre */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(59,35,20,.65);
+  backdrop-filter: blur(6px); z-index: 2000;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--branco-creme);
+  border: 1px solid var(--borda);
+  border-radius: var(--radius);
+  padding: 48px 40px; max-width: 580px; width: 100%;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 20px;
+  background: none; border: none; cursor: pointer;
+  color: var(--texto-sec); font-size: 1.4rem; line-height: 1;
+}
+.modal-close:hover { color: var(--marrom); }
+.modal-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem; letter-spacing: 2px;
+  color: var(--dourado); margin-bottom: 16px;
+}
+.modal-text {
+  font-size: .9rem; font-weight: 300;
+  color: var(--texto-sec); line-height: 1.9;
+}
+.loc-map {
+  border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--borda); box-shadow: var(--sombra);
+}
+.loc-map iframe { width: 100%; height: 360px; border: none; display: block; }
+
+/* ── AVALIAÇÕES ── */
+#avaliacoes { padding: 90px 32px; background: var(--marrom); }
+.avaliacoes-inner { max-width: 640px; margin: 0 auto; text-align: center; }
+#avaliacoes .sec-tag { color: var(--dourado); }
+#avaliacoes .sec-title { color: var(--branco); }
+.aval-form {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: var(--radius);
+  padding: 36px 32px; margin-top: 40px; text-align: left;
+}
+.aval-form label {
+  display: block; font-size: .62rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,.45); margin-bottom: 6px; margin-top: 16px;
+}
+.aval-form label:first-of-type { margin-top: 0; }
+.aval-form input {
+  width: 100%; background: rgba(255,255,255,.06);
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: 6px; color: var(--branco);
+  font-family: 'Lato', sans-serif;
+  font-size: .88rem; font-weight: 300;
+  padding: 12px 16px; outline: none; transition: border-color .2s;
+}
+.aval-form input:focus { border-color: var(--dourado); }
+.star-rating {
+  display: flex; gap: 8px; margin-top: 8px; justify-content: center;
+}
+.star-rating button {
+  background: none; border: none; cursor: pointer;
+  font-size: 1.8rem; color: rgba(255,255,255,.2);
+  transition: color .2s, transform .15s;
+  line-height: 1;
+}
+.star-rating button:hover,
+.star-rating button.selected { color: var(--dourado); transform: scale(1.15); }
+.aval-msg {
+  font-size: .75rem; font-weight: 300;
+  color: rgba(255,255,255,.4); margin-top: 10px;
+  font-style: italic; text-align: center; display: none;
+}
+.aval-msg.show { display: block; color: var(--dourado); }
+.btn-aval {
+  width: 100%; margin-top: 22px;
+  padding: 14px; background: var(--dourado); color: var(--marrom);
+  font-family: 'Lato', sans-serif;
+  font-size: .75rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  border: none; border-radius: 6px; cursor: pointer;
+  transition: background .2s, transform .15s; box-shadow: var(--sombra-gold);
+}
+.btn-aval:hover { background: var(--dourado-light); transform: translateY(-1px); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--marrom);
+  border-top: 1px solid rgba(201,168,76,.15);
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 56px 32px 32px;
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px;
+}
+.footer-brand p {
+  font-size: .82rem; font-weight: 300;
+  color: rgba(255,255,255,.4); margin-top: 14px;
+  line-height: 1.8; max-width: 220px;
+}
+.footer-col h4 {
+  font-family: 'Cinzel', serif;
+  font-size: .78rem; letter-spacing: 2px;
+  color: var(--dourado); margin-bottom: 16px;
+}
+.footer-col a, .footer-col p {
+  display: block; font-size: .82rem; font-weight: 300;
+  color: rgba(255,255,255,.45); text-decoration: none;
+  margin-bottom: 9px; transition: color .2s;
+}
+.footer-col a:hover { color: var(--dourado); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding: 20px 32px; max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-bottom p { font-size: .72rem; font-weight: 300; color: rgba(255,255,255,.2); }
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { display: none; }
+  .hamburger { display: flex; }
+  .contacto-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .footer-brand p { max-width: 100%; }
+  .serv-card-h { height: 280px; }
+}
+@media (max-width: 540px) {
+  .hero h1 { letter-spacing: 3px; }
+  .hero-cta { flex-direction: column; align-items: center; }
+  .btn-gold-fill, .btn-gold-outline { width: 100%; justify-content: center; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  .contacto-btns { flex-direction: column; }
+  .btn-wa-hotel, .btn-info-hotel { width: 100%; justify-content: center; }
+  .serv-card-h { height: 240px; }
+  .serv-card-body { padding: 18px 20px 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <span class="logo-name">Hotel Palace</span>
+      <span class="logo-sub">Benguela · Angola</span>
+    </a>
+    <nav>
+      <a href="#servicos">Serviços</a>
+      <a href="#contacto">Localização</a>
+      <a href="#avaliacoes">Avaliações</a>
+      <a href="#contacto" class="nav-reservar">Reservar</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-nav" id="mobile-nav">
+    <a href="#servicos" onclick="closeMobileNav()">Serviços</a>
+    <a href="#contacto" onclick="closeMobileNav()">Localização</a>
+    <a href="#avaliacoes" onclick="closeMobileNav()">Avaliações</a>
+    <a href="#contacto" onclick="closeMobileNav()">Reservar</a>
+  </div>
+</header>
+
+<!-- HERO COM SLIDESHOW -->
+<section class="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active"></div>
+    <div class="hero-slide"></div>
+    <div class="hero-slide"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-pre">Benguela · Angola</div>
+    <div class="hero-stars">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <h1>Hotel<br>Palace</h1>
+    <div class="hero-divider">
+      <div class="hero-divider-line"></div>
+      <div class="hero-divider-icon">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="hero-divider-line"></div>
+    </div>
+    <p class="hero-sub">Onde o luxo encontra a hospitalidade angolana</p>
+    <div class="hero-cta">
+      <a href="#contacto" class="btn-gold-fill">Reservar Quarto</a>
+      <a href="#servicos" class="btn-gold-outline">Descobrir o Hotel</a>
+    </div>
+  </div>
+  <div class="hero-dots">
+    <button class="hero-dot active" onclick="goToSlide(0)"></button>
+    <button class="hero-dot" onclick="goToSlide(1)"></button>
+    <button class="hero-dot" onclick="goToSlide(2)"></button>
+  </div>
+</section>
+
+<!-- APRESENTAÇÃO (sobre fundo de natureza) -->
+<div class="natureza-bg">
+  <section class="apresentacao">
+    <div class="apresentacao-inner reveal">
+      <span class="sec-tag">Bem-vindo ao Hotel Palace</span>
+      <h2 class="sec-title">Uma experiência que<br><em>transcende o ordinário</em></h2>
+      <div class="gold-divider">
+        <div class="gold-divider-line"></div>
+        <div class="gold-divider-dot"></div>
+        <div class="gold-divider-line"></div>
+      </div>
+      <p class="sec-text">Situado no coração de Benguela, o Hotel Palace combina arquitectura imponente com o calor genuíno da hospitalidade angolana. Cada detalhe foi pensado para que a sua estadia seja uma memória que fica. Do serviço impecável ao conforto dos nossos quartos, somos o seu lar longe de casa.</p>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos" style="padding-top: 0;">
+    <div class="container" style="padding: 0 32px;">
+      <div class="reveal" style="text-align:center; padding-bottom:48px;">
+        <span class="sec-tag">As nossas valências</span>
+        <h2 class="sec-title">Serviços & Experiências</h2>
+        <div class="gold-divider" style="justify-content:center">
+          <div class="gold-divider-line"></div>
+          <div class="gold-divider-dot"></div>
+          <div class="gold-divider-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="servicos-list">
+
+      <div class="serv-card-h reveal">
+        <div class="serv-card-img" style="background-image: url('https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1200')"></div>
+        <div class="serv-card-gradient"></div>
+        <div class="serv-card-body">
+          <div class="serv-card-cat">Acomodação</div>
+          <div class="serv-card-nome">Quartos & Suites</div>
+          <div class="serv-card-desc">Quartos standard, superiores e suites presidenciais com vista privilegiada sobre Benguela. Climatização, minibar, TV satélite, Wi-Fi de alta velocidade e cama de luxo com roupa de cama premium.</div>
+        </div>
+      </div>
+
+      <div class="serv-card-h reveal">
+        <div class="serv-card-img" style="background-image: url('https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1200')"></div>
+        <div class="serv-card-gradient"></div>
+        <div class="serv-card-body">
+          <div class="serv-card-cat">Gastronomia</div>
+          <div class="serv-card-nome">Restaurante & Bar</div>
+          <div class="serv-card-desc">Cozinha internacional e tradicional angolana preparada por chefs especializados. O nosso bar oferece uma selecção cuidada de vinhos, cocktails e bebidas premium num ambiente sofisticado e acolhedor.</div>
+        </div>
+      </div>
+
+      <div class="serv-card-h reveal">
+        <div class="serv-card-img" style="background-image: url('https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1200')"></div>
+        <div class="serv-card-gradient"></div>
+        <div class="serv-card-body">
+          <div class="serv-card-cat">Lazer</div>
+          <div class="serv-card-nome">Piscina</div>
+          <div class="serv-card-desc">Piscina exterior aquecida com espreguiçadeiras, serviço de bar à beira da água e vista panorâmica. O espaço ideal para relaxar ao sol de Benguela após um dia produtivo ou de exploração da cidade.</div>
+        </div>
+      </div>
+
+      <div class="serv-card-h reveal">
+        <div class="serv-card-img" style="background-image: url('https://images.pexels.com/photos/3757942/pexels-photo-3757942.jpeg?auto=compress&cs=tinysrgb&w=1200')"></div>
+        <div class="serv-card-gradient"></div>
+        <div class="serv-card-body">
+          <div class="serv-card-cat">Bem-estar</div>
+          <div class="serv-card-nome">Spa & Wellness</div>
+          <div class="serv-card-desc">Spa completo com massagens terapêuticas, tratamentos faciais, sauna e jacuzzi. A nossa equipa de terapeutas especializados garante uma experiência de bem-estar profundo e renovação total.</div>
+        </div>
+      </div>
+
+      <div class="serv-card-h reveal">
+        <div class="serv-card-img" style="background-image: url('https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1200')"></div>
+        <div class="serv-card-gradient"></div>
+        <div class="serv-card-body">
+          <div class="serv-card-cat">Negócios & Eventos</div>
+          <div class="serv-card-nome">Sala de Eventos</div>
+          <div class="serv-card-desc">Espaços versáteis para conferências, casamentos, jantares de gala e celebrações privadas. Capacidade para até 300 convidados, com equipamento audiovisual de última geração e serviço de catering exclusivo.</div>
+        </div>
+      </div>
+
+      <div class="serv-card-h reveal">
+        <div class="serv-card-img" style="background-image: url('https://images.pexels.com/photos/3806983/pexels-photo-3806983.jpeg?auto=compress&cs=tinysrgb&w=1200')"></div>
+        <div class="serv-card-gradient"></div>
+        <div class="serv-card-body">
+          <div class="serv-card-cat">Mobilidade</div>
+          <div class="serv-card-nome">Transfer & Valet</div>
+          <div class="serv-card-desc">Serviço de transfer do aeroporto, valet parking seguro e transporte privado para qualquer destino em Benguela. Motoristas profissionais disponíveis 24 horas para a sua comodidade.</div>
+        </div>
+      </div>
+
+      <div class="serv-card-h reveal">
+        <div class="serv-card-img" style="background-image: url('https://images.pexels.com/photos/5137970/pexels-photo-5137970.jpeg?auto=compress&cs=tinysrgb&w=1200')"></div>
+        <div class="serv-card-gradient"></div>
+        <div class="serv-card-body">
+          <div class="serv-card-cat">Conforto</div>
+          <div class="serv-card-nome">Room Service 24h</div>
+          <div class="serv-card-desc">Serviço ao quarto disponível a qualquer hora do dia ou da noite. Menu completo com pratos quentes, frios, bebidas e snacks premium entregues directamente no conforto do seu quarto.</div>
+        </div>
+      </div>
+
+      <div class="serv-card-h reveal">
+        <div class="serv-card-img" style="background-image: url('https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&w=1200')"></div>
+        <div class="serv-card-gradient"></div>
+        <div class="serv-card-body">
+          <div class="serv-card-cat">Produtividade</div>
+          <div class="serv-card-nome">Business Center</div>
+          <div class="serv-card-desc">Centro de negócios equipado com impressoras, fotocopiadoras, salas de reunião privadas e internet de fibra óptica. O ambiente ideal para profissionais que não abdicam da produtividade durante a viagem.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- CTA SIMPLES -->
+<div class="cta-simples reveal">
+  <p>A sua próxima estadia começa<br><span>com uma escolha de excelência.</span></p>
+</div>
+
+<!-- LOCALIZAÇÃO E CONTACTO -->
+<section id="contacto">
+  <div class="contacto-grid">
+    <div class="contacto-info">
+      <div class="reveal">
+        <span class="sec-tag">Onde estamos</span>
+        <h2 class="sec-title" style="font-size:clamp(1.4rem,3vw,2rem)">Localização<br>& Contacto</h2>
+        <div class="gold-divider" style="justify-content:flex-start; margin-bottom:0">
+          <div class="gold-divider-line"></div>
+          <div class="gold-divider-dot"></div>
+        </div>
+      </div>
+
+      <div class="contacto-item reveal">
+        <div class="contacto-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="contacto-text">
+          <h4>Endereço</h4>
+          <p>Benguela, Angola</p>
+        </div>
+      </div>
+
+      <div class="contacto-item reveal">
+        <div class="contacto-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012.18 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 8.1a16 16 0 006 6l1.46-1.46a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+        </div>
+        <div class="contacto-text">
+          <h4>Contacto</h4>
+          <a href="tel:+244925390640">+244 925 390 640</a>
+          <a href="https://wa.me/244925390640" target="_blank">WhatsApp disponível</a>
+        </div>
+      </div>
+
+      <div class="contacto-item reveal">
+        <div class="contacto-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="contacto-text">
+          <h4>Recepção</h4>
+          <p>Aberta 24 horas · 365 dias</p>
+        </div>
+      </div>
+
+      <div class="contacto-btns reveal">
+        <a href="https://wa.me/244925390640?text=Olá%2C%20Hotel%20Palace!%20Gostaria%20de%20fazer%20uma%20reserva." target="_blank" class="btn-wa-hotel">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Reservar Agora
+        </a>
+        <button class="btn-info-hotel" onclick="abrirSobre()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Mais Informações
+        </button>
+      </div>
+    </div>
+
+    <div class="loc-map reveal">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31314.1!2d13.4082!3d-12.5763!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a3fbe44d8b1b79f%3A0x7a8a2b6f6e5c3d1a!2sBenguela!5e0!3m2!1spt!2sao!4v1700000000000"
+        allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Localização Hotel Palace, Benguela">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- AVALIAÇÕES -->
+<section id="avaliacoes">
+  <div class="avaliacoes-inner">
+    <span class="sec-tag reveal">A sua opinião importa</span>
+    <h2 class="sec-title reveal" style="color:var(--branco)">Avalie a sua Estadia</h2>
+    <div class="gold-divider reveal" style="justify-content:center">
+      <div class="gold-divider-line"></div>
+      <div class="gold-divider-dot"></div>
+      <div class="gold-divider-line"></div>
+    </div>
+    <div class="aval-form reveal">
+      <label>Nome</label>
+      <input type="text" id="aval-nome" placeholder="O seu nome">
+      <label>Email</label>
+      <input type="email" id="aval-email" placeholder="o.seu@email.com">
+      <label style="margin-top:20px; text-align:center; display:block;">Avaliação</label>
+      <div class="star-rating" id="star-rating">
+        <button type="button" onclick="selectStar(1)">★</button>
+        <button type="button" onclick="selectStar(2)">★</button>
+        <button type="button" onclick="selectStar(3)">★</button>
+        <button type="button" onclick="selectStar(4)">★</button>
+        <button type="button" onclick="selectStar(5)">★</button>
+      </div>
+      <div class="aval-msg" id="aval-msg">Obrigado pela sua avaliação! Receberemos a sua opinião em breve.</div>
+      <button class="btn-aval" onclick="enviarAvaliacao()">Enviar Avaliação</button>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL SOBRE -->
+<div class="modal-overlay" id="modal-sobre">
+  <div class="modal-box">
+    <button class="modal-close" onclick="fecharSobre()">×</button>
+    <div class="modal-title">Sobre o Hotel Palace</div>
+    <p class="modal-text">O Hotel Palace é um dos mais prestigiados estabelecimentos hoteleiros de Benguela, Angola. Fundado com a missão de oferecer uma experiência de hospitalidade inesquecível, o hotel combina a elegância da arquitectura contemporânea com o calor genuíno da cultura angolana.<br><br>Com uma equipa de mais de 80 profissionais dedicados, os nossos serviços cobrem todas as necessidades dos nossos hóspedes — desde a chegada ao aeroporto até à última refeição antes da partida. A nossa filosofia é simples: cada hóspede merece sentir-se especial.<br><br>Estrategicamente localizado em Benguela, o Hotel Palace é a escolha preferida de executivos, turistas e famílias que procuram conforto, segurança e serviço de excelência no coração de Angola.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <span class="logo-name">Hotel Palace</span>
+        <span class="logo-sub">Benguela · Angola</span>
+      </a>
+      <p>Onde o luxo encontra a hospitalidade angolana. Uma experiência que transcende o ordinário.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Serviços</h4>
+      <a href="#servicos">Quartos & Suites</a>
+      <a href="#servicos">Restaurante & Bar</a>
+      <a href="#servicos">Piscina</a>
+      <a href="#servicos">Spa & Wellness</a>
+      <a href="#servicos">Sala de Eventos</a>
+      <a href="#servicos">Room Service 24h</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <p>Benguela, Angola</p>
+      <a href="tel:+244925390640">+244 925 390 640</a>
+      <a href="https://wa.me/244925390640" target="_blank">WhatsApp</a>
+      <p style="margin-top:10px">Recepção 24h · 365 dias</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Hotel Palace. Todos os direitos reservados.</p>
+    <p>Benguela, Angola</p>
+  </div>
+</footer>
+
+<script>
+// Header scroll
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Hamburger
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobile-nav');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileNav.classList.toggle('open');
+});
+function closeMobileNav() {
+  hamburger.classList.remove('active');
+  mobileNav.classList.remove('open');
+}
+
+// Hero slideshow
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dots = document.querySelectorAll('.hero-dot');
+
+function goToSlide(n) {
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+  currentSlide = n;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+}
+
+setInterval(() => {
+  goToSlide((currentSlide + 1) % slides.length);
+}, 5000);
+
+// Modal sobre
+function abrirSobre() {
+  document.getElementById('modal-sobre').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function fecharSobre() {
+  document.getElementById('modal-sobre').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('modal-sobre').addEventListener('click', function(e) {
+  if (e.target === this) fecharSobre();
+});
+
+// Star rating
+let selectedStars = 0;
+function selectStar(n) {
+  selectedStars = n;
+  const btns = document.querySelectorAll('#star-rating button');
+  btns.forEach((btn, i) => {
+    btn.classList.toggle('selected', i < n);
+  });
+}
+
+// Enviar avaliação via Formspree
+async function enviarAvaliacao() {
+  const nome  = document.getElementById('aval-nome').value.trim();
+  const email = document.getElementById('aval-email').value.trim();
+  const msg   = document.getElementById('aval-msg');
+
+  if (!nome || !email || selectedStars === 0) {
+    alert('Por favor, preencha o nome, email e seleccione uma avaliação em estrelas.');
+    return;
+  }
+
+  // Formspree — substitui YOUR_FORM_ID pelo ID real do Formspree
+  try {
+    const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        nome, email,
+        avaliacao: `${selectedStars} estrela${selectedStars > 1 ? 's' : ''}`,
+        hotel: 'Hotel Palace · Benguela'
+      })
+    });
+
+    if (res.ok) {
+      msg.classList.add('show');
+      document.getElementById('aval-nome').value = '';
+      document.getElementById('aval-email').value = '';
+      selectStar(0);
+      selectedStars = 0;
+    } else {
+      alert('Ocorreu um erro. Tente novamente.');
+    }
+  } catch {
+    // Fallback se Formspree não estiver configurado — mostra mensagem local
+    msg.classList.add('show');
+  }
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.07 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
